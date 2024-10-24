@@ -1,8 +1,8 @@
 let genderIndex = 0;
 const genders = ['male', 'female'];
 const genderImages = {
-  male: 'male.png',
-  female: 'female.png'
+  male: 'man.webp',
+  female: 'woman.webp'
 };
 
 function prevGender() {
