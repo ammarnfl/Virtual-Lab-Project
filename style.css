@@ -31,7 +31,6 @@ body {
     align-items: center;
 }
 
-  
   h1 {
     margin: 0;
     font-size: 2.5em;
@@ -68,9 +67,11 @@ body {
     display: flex;
     justify-content: center;
 }
+    
 .input-container div {
     margin: 0 10px;
 }
+
 input {
     width: 60px;
     padding: 5px;

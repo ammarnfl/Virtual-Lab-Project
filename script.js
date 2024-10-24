@@ -5,7 +5,6 @@ const genderImages = {
   female: 'female.png'
 };
 
-// Gender switch logic
 function prevGender() {
   genderIndex = (genderIndex - 1 + genders.length) % genders.length;
   updateGenderImage();
@@ -20,17 +19,10 @@ function updateGenderImage() {
   document.getElementById('gender-image').src = genderImages[genders[genderIndex]];
 }
 
-// BMI calculation logic
 function calculateBMI() {
-    const canvasHeight = 300;
-    const canvasWidth = 300;
-  
-    // Skala koordinat menjadi tinggi dan berat yang realistis
-    const height = (point.x / canvasWidth) * 200 + 100; // Skala tinggi badan antara 100cm - 300cm
-    const weight = (point.y / canvasHeight) * 150; // Skala berat badan antara 0kg - 150kg
-  
+    const height = parseFloat(heightInput.value);
+    const weight = parseFloat(weightInput.value);
     const bmi = (weight / ((height / 100) ** 2)).toFixed(1); // Rumus BMI
-  
     displayBMIResult(bmi);
 }
 
@@ -60,7 +52,6 @@ function displayBMIResult(bmi) {
   bmiDescription.style.color = color;
 }
 
-// Show information modal
 function showInfo() {
   document.getElementById('info-modal').style.display = 'block';
 }
@@ -68,6 +59,7 @@ function showInfo() {
 function closeInfo() {
   document.getElementById('info-modal').style.display = 'none';
 }
+
 const canvas = document.getElementById('coordinateCanvas');
 const ctx = canvas.getContext('2d');
 let dragging = false;
