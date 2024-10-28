@@ -65,45 +65,48 @@ const ctx = canvas.getContext('2d');
 let dragging = false;
 
 // Titik awal
-let point = { x: 150, y: 150 };
+let point = {x: 150, y: 150};
 
 // Dapatkan elemen input untuk berat dan tinggi badan
 const heightInput = document.getElementById('heightInput');
 const weightInput = document.getElementById('weightInput');
+const sbY = {x: 100, y0 : 30, y1: 280};
+const sbX = {y: sbY.y1, x0 : 100, x1: 300};
+
 
 // Fungsi untuk menggambar koordinat kartesius dan titik yang dapat digeser
 function drawCoordinates() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   // Gambar garis koordinat
   ctx.beginPath();
-  ctx.moveTo(50, 0); // Sumbu Y
-  ctx.lineTo(50, 300); // Vertikal dari bawah ke atas
-  ctx.moveTo(50, 250); // Sumbu X dimulai dari bawah
-  ctx.lineTo(300, 250); // Horizontal dari kiri ke kanan
+  ctx.moveTo(sbY.x, sbY.y0); // Sumbu Y
+  ctx.lineTo(sbY.x, sbY.y1); // Vertikal dari bawah ke atas
+  ctx.moveTo(sbX.x0, sbX.y); // Sumbu X dimulai dari bawah
+  ctx.lineTo(sbX.x1, sbX.y); // Horizontal dari kiri ke kanan
   ctx.strokeStyle = '#4a4a4a';
   ctx.stroke();
 
   // Tambahkan label untuk sumbu X dan Y
   ctx.font = '14px Poppins';
   ctx.fillStyle = '#4a4a4a';
-  ctx.fillText('Tinggi (cm)', 170, 270); // Label sumbu X
-  ctx.fillText('Berat (kg)', 10, 130); // Label sumbu Y
+  ctx.fillText('Tinggi (cm)', sbX.x0 + 80, sbY.y1 + 50); // Label sumbu X
+  ctx.fillText('Berat (kg)', sbX.x0-90, sbY.y0 + 130); // Label sumbu Y
+
 
   // Skala dan grid sumbu X (100 cm - 200 cm)
-  for (let i = 100; i <= 200; i += 20) {
-    let x = mapRange(i, 100, 200, 50, 300); // Konversi skala tinggi
-    ctx.fillText(i, x, 265); // Label skala tinggi badan
-    ctx.moveTo(x, 250);
-    ctx.lineTo(x, 245); // Garis kecil skala X
+  for (let i = 100; i <= 250; i += 30) {
+    let x = mapRange(i, 100, 250, sbX.x0, sbX.x1); // Konversi skala tinggi
+    ctx.fillText(i, x, sbY.y1+20); // Label skala tinggi badan
+    ctx.moveTo(x, sbY.y1+5);
+    ctx.lineTo(x, sbY.y1); // Garis kecil skala X
   }
 
   // Skala dan grid sumbu Y (20 kg - 170 kg)
   for (let i = 20; i <= 170; i += 30) {
-    let y = mapRange(i, 20, 170, 250, 0); // Konversi skala berat badan
-    ctx.fillText(i, 15, y + 5); // Label skala berat badan
-    ctx.moveTo(50, y);
-    ctx.lineTo(55, y); // Garis kecil skala Y
+    let y = mapRange(i, 20, 170, sbY.y1, sbY.y0); // Konversi skala berat badan
+    ctx.fillText(i, sbX.x0-30, y + 5); // Label skala berat badan
+    ctx.moveTo(sbX.x0, y);
+    ctx.lineTo(sbX.x0-5, y); // Garis kecil skala Y
   }
   ctx.stroke();
 
@@ -124,8 +127,8 @@ function mapRange(value, inMin, inMax, outMin, outMax) {
 
 // Fungsi untuk memperbarui nilai input berdasarkan posisi titik
 function updateInputsFromPoint() {
-  const height = Math.round(mapRange(point.x, 50, 300, 100, 200));
-  const weight = Math.round(mapRange(point.y, 250, 0, 20, 170));
+  const height = Math.round(mapRange(point.x, sbX.x0, sbX.x1, 100, 250));
+  const weight = Math.round(mapRange(point.y, sbY.y1, sbY.y0, 20, 170));
   
   heightInput.value = height;
   weightInput.value = weight;
@@ -135,9 +138,10 @@ function updateInputsFromPoint() {
 function updatePointFromInputs() {
   const height = parseInt(heightInput.value);
   const weight = parseInt(weightInput.value);
+  console.log(height, weight);
 
-  point.x = mapRange(height, 100, 200, 50, 300);
-  point.y = mapRange(weight, 20, 170, 250, 0);
+  point.x = mapRange(height, 100, 250, sbX.x0, sbX.x1,);
+  point.y = mapRange(weight, 20, 170, sbY.y1, sbY.y0);
 
   drawCoordinates();
 }
@@ -161,7 +165,7 @@ canvas.addEventListener('mousemove', (e) => {
     let newY = e.clientY - rect.top;
 
     // Batas nilai x (100 - 200 cm) dan y (20 - 170 kg)
-    if (newX >= 50 && newX <= 300 && newY >= 0 && newY <= 250) {
+    if (newX >= sbX.x0 && newX <= sbX.x1 && newY >= sbY.y0 && newY <= sbY.y1) {
       point.x = newX;
       point.y = newY;
       drawCoordinates();
@@ -186,6 +190,6 @@ function updateGenderImage() {
     setTimeout(() => {
       genderImage.src = genderImages[genders[genderIndex]];
       genderImage.classList.remove('switched');
-    }, 400); // Waktu yang sinkron dengan animasi
+    }, 200); // Waktu yang sinkron dengan animasi
   }
   

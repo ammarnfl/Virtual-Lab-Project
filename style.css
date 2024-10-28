@@ -5,67 +5,75 @@ body {
     color: #4a4a4a;
     margin: 0;
     padding: 0;
-  }
+}
   
-  header {
+header {
     background-color: #82c4c3;
     padding: 10px;
     text-align: center;
     position: relative;
-  }
+}
   
-  .info-btn {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 1.5em;
-    color: white;
-    cursor: pointer;
-    border: 2px solid white;
-    border-radius: 50%; /* Membuat tombol bulat */
-    padding: 5px;
-    width: 40px; /* Menentukan lebar tombol */
-    height: 40px; /* Menentukan tinggi tombol */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.info-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 1.5em;
+  color: white;
+  cursor: pointer;
+  border: 2px solid white;
+  border-radius: 50%; /* Membuat tombol bulat */
+  padding: 5px;
+  width: 30px; /* Menentukan lebar tombol */
+  height: 30px; /* Menentukan tinggi tombol */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-  h1 {
+.info-btn:hover{
+  background-color: #729f9e;
+}
+
+h1 {
     margin: 0;
     font-size: 2.5em;
     color: white;
     font-family: 'Poppins', sans-serif;
-  }
+}
   
-  /* Container */
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
-  
-  /* Main container */
-  .bmi-container {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    margin: 20px auto;
-    background-color: #eef6f7;
-    border-radius: 20px;
-  }
-  canvas {
-    background-color: white;
-    border: 1px solid #ccc;
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Main container */
+.bmi-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin: 20px auto;
+  background-color: #eef6f7;
+  border-radius: 20px;
+}
+
+canvas {
+  background-color: white;
+  border: 1px solid #ccc;
 }
 
 .input-container {
     margin-top: 20px;
     display: flex;
+    flex-direction: column;
+    row-gap: 15px;
     justify-content: center;
+    align-items: center;
 }
     
 .input-container div {
@@ -80,132 +88,136 @@ input {
     border-radius: 5px;
 }
   
-  .gender-selector {
-    display: flex;
+.gender-selector {
+  display: flex;
+  align-items: center;
+}
+
+.gender-selector img {
+  width: 100px;
+  height: auto;
+  margin: 0 10px;
+  transition: transform 0.4s ease-in-out; /* Smooth transition */
+}
+
+.gender-selector img.switched {
+  transform: scale(1.1); /* Efek animasi saat gender berubah */
+}
+
+.coordinate-selector {
+  position: relative;
+  margin: 20px;
+}
+  
+#coordinateCanvas {
+  background-color: #eef6f7;
+  border: 2px solid #82c4c3;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+#coordinateCanvas:hover {
+  background-color: #d1f0f0; /* Mengubah warna latar saat drag terjadi */
+}
+  
+.calculate-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #82c4c3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+  
+.calculate-btn:hover{
+  background-color: #729f9e;
+}
+  
+.bmi-result {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.bmi-result p {
+  font-size: 1.5em;
+}
+  
+.articles {
+  margin: 20px;
+  text-align: center;
+}
+
+.article-slider {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth; /* Efek geser yang halus */
+  padding: 10px;
+}
+
+/* .article-slider::-webkit-scrollbar {
+  display: none;
+}   */
+
+.article {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 200px;
+  flex: none;
+  transition: transform 0.3s ease-in-out; /* Efek saat dihover */
+}
+
+.article:hover {
+  transform: scale(1.05); /* Perbesar saat dihover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Berikan efek bayangan */
+}
+  
+.article img {
+  width: 150px;
+  border-radius: 10px;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+  
+.close:hover, .close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .bmi-container {
+    flex-direction: column;
     align-items: center;
   }
-  
-  .gender-selector img {
-    width: 100px;
-    height: auto;
-    margin: 0 10px;
-    transition: transform 0.4s ease-in-out; /* Smooth transition */
-  }
-
-  .gender-selector img.switched {
-    transform: scale(1.1) rotate(10deg); /* Efek animasi saat gender berubah */
-  }
-  
-  .coordinate-selector {
-    position: relative;
-    margin: 20px;
-  }
-  
-  #coordinateCanvas {
-    background-color: #eef6f7;
-    border: 2px solid #82c4c3;
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-  }
-
-  #coordinateCanvas:hover {
-    background-color: #d1f0f0; /* Mengubah warna latar saat drag terjadi */
-  }
-  
-  .calculate-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #82c4c3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .bmi-result {
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  .bmi-result p {
-    font-size: 1.5em;
-  }
-  
-  .articles {
-    margin: 20px;
-    text-align: center;
-  }
-  
-  .article-slider {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scroll-behavior: smooth; /* Efek geser yang halus */
-    padding: 10px;
-  }
-
-  .article-slider::-webkit-scrollbar {
-    display: none; /* Menyembunyikan scrollbar agar tampilan lebih bersih */
-  }  
-  
-  .article {
-    background-color: white;
-    border-radius: 10px;
-    padding: 10px;
-    min-width: 200px;
-    flex: none;
-    transition: transform 0.3s ease-in-out; /* Efek saat dihover */
-  }
-
-  .article:hover {
-    transform: scale(1.05); /* Perbesar saat dihover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Berikan efek bayangan */
-  }
-  
-  .article img {
-    width: 150px;
-    border-radius: 10px;
-  }
-  
-  /* Modal styles */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-  }
-  
-  .modal-content {
-    background-color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 600px;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  @media (max-width: 768px) {
-    .bmi-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
+}
   
