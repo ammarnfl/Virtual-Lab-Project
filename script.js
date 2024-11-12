@@ -1,8 +1,8 @@
 let genderIndex = 0;
 const genders = ['male', 'female'];
 const genderImages = {
-  male: 'man.webp',
-  female: 'woman.webp'
+  male: '/documentation/man.webp',
+  female: '/documentation/woman.webp'
 };
 
 function prevGender() {
@@ -174,6 +174,39 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 canvas.addEventListener('mouseup', () => {
+  dragging = false;
+});
+
+// Event listener untuk drag and drop titik dengan touch
+canvas.addEventListener('touchstart', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const touchX = e.touches[0].clientX - rect.left;
+  const touchY = e.touches[0].clientY - rect.top;
+
+  // Jika sentuh dekat dengan titik, aktifkan dragging
+  if (Math.abs(touchX - point.x) < 10 && Math.abs(touchY - point.y) < 10) {
+    dragging = true;
+    e.preventDefault(); // Mencegah halaman scroll
+  }
+});
+
+canvas.addEventListener('touchmove', (e) => {
+  if (dragging) {
+    const rect = canvas.getBoundingClientRect();
+    let newX = e.touches[0].clientX - rect.left;
+    let newY = e.touches[0].clientY - rect.top;
+
+    // Batas nilai x (100 - 200 cm) dan y (20 - 170 kg)
+    if (newX >= sbX.x0 && newX <= sbX.x1 && newY >= sbY.y0 && newY <= sbY.y1) {
+      point.x = newX;
+      point.y = newY;
+      drawCoordinates();
+    }
+    e.preventDefault(); // Mencegah halaman scroll
+  }
+});
+
+canvas.addEventListener('touchend', () => {
   dragging = false;
 });
 
