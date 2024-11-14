@@ -1,3 +1,22 @@
+// Dropdown menu functionality
+document.addEventListener('DOMContentLoaded', (event) => {
+  const dropBtn = document.querySelector('.dropbtn');
+  const dropdownContent = document.querySelector('.dropdown-content');
+
+  dropBtn.addEventListener('click', () => {
+    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Close the dropdown if the user clicks outside of it
+  window.addEventListener('click', (event) => {
+    if (!event.target.matches('.dropbtn')) {
+      if (dropdownContent.style.display === 'block') {
+        dropdownContent.style.display = 'none';
+      }
+    }
+  });
+});
+
 let genderIndex = 0;
 const genders = ['male', 'female'];
 const genderImages = {
