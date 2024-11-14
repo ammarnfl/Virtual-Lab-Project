@@ -177,11 +177,21 @@ canvas.addEventListener('mouseup', () => {
   dragging = false;
 });
 
+// Hitung skala canvas
+function getCanvasScale() {
+  const rect = canvas.getBoundingClientRect();
+  return {
+      scaleX: canvas.width / rect.width,
+      scaleY: canvas.height / rect.height
+  };
+}
+
 // Event listener untuk drag and drop titik dengan touch
 canvas.addEventListener('touchstart', (e) => {
   const rect = canvas.getBoundingClientRect();
-  const touchX = e.touches[0].clientX - rect.left;
-  const touchY = e.touches[0].clientY - rect.top;
+  const scale = getCanvasScale();
+  const touchX = (e.touches[0].clientX - rect.left) * scale.scaleX;
+  const touchY = (e.touches[0].clientY - rect.top) * scale.scaleY;
 
   // Jika sentuh dekat dengan titik, aktifkan dragging
   if (Math.abs(touchX - point.x) < 10 && Math.abs(touchY - point.y) < 10) {
@@ -193,8 +203,9 @@ canvas.addEventListener('touchstart', (e) => {
 canvas.addEventListener('touchmove', (e) => {
   if (dragging) {
     const rect = canvas.getBoundingClientRect();
-    let newX = e.touches[0].clientX - rect.left;
-    let newY = e.touches[0].clientY - rect.top;
+    const scale = getCanvasScale();
+    let newX = (e.touches[0].clientX - rect.left) * scale.scaleX;
+    let newY = (e.touches[0].clientY - rect.top) * scale.scaleY;
 
     // Batas nilai x (100 - 200 cm) dan y (20 - 170 kg)
     if (newX >= sbX.x0 && newX <= sbX.x1 && newY >= sbY.y0 && newY <= sbY.y1) {
