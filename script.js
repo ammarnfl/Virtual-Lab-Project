@@ -255,4 +255,3 @@ function updateGenderImage() {
       genderImage.classList.remove('switched');
     }, 200); // Waktu yang sinkron dengan animasi
   }
-  

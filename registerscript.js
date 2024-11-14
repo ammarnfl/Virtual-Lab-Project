@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const analytics = getAnalytics(app);
 
+
 // Submit button
 const submit = document.getElementById('submit');
 submit.addEventListener("click", function (event) {
@@ -32,18 +33,17 @@ submit.addEventListener("click", function (event) {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  signInWithEmailAndPassword (auth, email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed up
       const user = userCredential.user;
-      alert("Berhasil Login!")
-      window.location.href = "index.html";
+      alert("Akun Berhasil Dibuat!")
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      alert("Password Salah!")
+      alert(errorMessage)
       // ..
     });
 })

@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const dialogTitle = document.getElementById('dialogTitle');
   const dialogMessage = document.getElementById('dialogMessage');
   const confirmButton = document.getElementById('confirmButton');
-  const cancelDialogButton = document.getElementById('cancelButton');
+  const cancelDialogButton = document.getElementById('cancelButtonDialog');
 
   // Mock user data (replace with actual data fetching in a real application)
   const userData = {
@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Cancel edit and return to view mode
   cancelButton.addEventListener('click', function() {
+    
     showConfirmationDialog(
       'Cancel Changes',
       'Are you sure you want to cancel? Any unsaved changes will be lost.',
