@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const profilePicturePreview = document.getElementById('profilePicturePreview').querySelector('img');
   const currentProfilePicture = document.getElementById('currentProfilePicture');
 
+  // Elements for the confirmation dialog
+  const confirmationDialog = document.getElementById('confirmationDialog');
+  const dialogTitle = document.getElementById('dialogTitle');
+  const dialogMessage = document.getElementById('dialogMessage');
+  const confirmButton = document.getElementById('confirmButton');
+  const cancelDialogButton = document.getElementById('cancelButton');
+
   // Mock user data (replace with actual data fetching in a real application)
   const userData = {
     username: 'johndoe',
@@ -17,6 +24,21 @@ document.addEventListener('DOMContentLoaded', function() {
     weight: 70,
     profilePicture: '/placeholder.svg?height=200&width=200'
   };
+
+  function showConfirmationDialog(title, message, onConfirm) {
+    dialogTitle.textContent = title;
+    dialogMessage.textContent = message;
+    confirmationDialog.style.display = 'block';
+
+    confirmButton.onclick = () => {
+      onConfirm();
+      confirmationDialog.style.display = 'none';
+    };
+
+    cancelDialogButton.onclick = () => {
+      confirmationDialog.style.display = 'none';
+    };
+  }
 
   // Populate view mode
   function populateViewMode() {
@@ -48,8 +70,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Cancel edit and return to view mode
   cancelButton.addEventListener('click', function() {
-    profileView.style.display = 'block';
-    editProfileForm.style.display = 'none';
+    showConfirmationDialog(
+      'Cancel Changes',
+      'Are you sure you want to cancel? Any unsaved changes will be lost.',
+      function() {
+        profileView.style.display = 'block';
+        editProfileForm.style.display = 'none';
+      }
+    );
   });
 
   // Handle profile picture preview
@@ -68,21 +96,25 @@ document.addEventListener('DOMContentLoaded', function() {
   editProfileForm.addEventListener('submit', function(event) {
     event.preventDefault();
     
-    // Here you would typically send the form data to your server
-    // For now, we'll just update the mock userData and refresh the view
-    userData.username = document.getElementById('username').value;
-    userData.firstName = document.getElementById('firstName').value;
-    userData.lastName = document.getElementById('lastName').value;
-    userData.gender = document.getElementById('gender').value;
-    userData.height = document.getElementById('height').value;
-    userData.weight = document.getElementById('weight').value;
-    userData.profilePicture = profilePicturePreview.src;
+    showConfirmationDialog(
+      'Save Changes',
+      'Are you sure you want to save these changes?',
+      function() {
+        userData.username = document.getElementById('username').value;
+        userData.firstName = document.getElementById('firstName').value;
+        userData.lastName = document.getElementById('lastName').value;
+        userData.gender = document.getElementById('gender').value;
+        userData.height = document.getElementById('height').value;
+        userData.weight = document.getElementById('weight').value;
+        userData.profilePicture = profilePicturePreview.src;
 
-    populateViewMode();
-    profileView.style.display = 'block';
-    editProfileForm.style.display = 'none';
+        populateViewMode();
+        profileView.style.display = 'block';
+        editProfileForm.style.display = 'none';
 
-    alert('Profile updated successfully!');
+        alert('Profile updated successfully!');
+      }
+    );
   });
 
   // Initial population of view mode
