@@ -1,13 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
   authDomain: "virtual-lab-project.firebaseapp.com",
@@ -21,7 +15,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const analytics = getAnalytics(app);
 
 function showMessage(message, divId){
   var messageDiv = document.getElementById(divId);
@@ -34,7 +27,7 @@ function showMessage(message, divId){
 }
 
 // Submit button
-const Login = document.getElementById('login');
+const login = document.getElementById('login');
 login.addEventListener("click", function (event) {
   event.preventDefault()
 
@@ -53,13 +46,10 @@ login.addEventListener("click", function (event) {
     })
     .catch((error) => {
       const errorCode = error.code;
-      if(errorCode === 'auth/invalid-credential'){
+      if(errorCode == 'auth/invalid-credential'){
         showMessage("Incorrect Email or Password", "loginMessage");
+      }else{
+        showMessage("Account does not Exist! Register First", "loginMessage");
       }
-      else{
-        showMessage("Account does not Exist", "signInMessage");
-      }
-      // const errorMessage = error.message;
-      // alert("Password Salah!")
     });
 })

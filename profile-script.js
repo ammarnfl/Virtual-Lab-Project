@@ -1,3 +1,50 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
+  authDomain: "virtual-lab-project.firebaseapp.com",
+  projectId: "virtual-lab-project",
+  storageBucket: "virtual-lab-project.firebasestorage.app",
+  messagingSenderId: "400854323817",
+  appId: "1:400854323817:web:b7efe2ac244034a56e48f8",
+  measurementId: "G-G90H1N4JVJ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// function getData(){
+//   const dbRef = ref(db);
+
+//   get(child(dbRef, 'UserProfile/' + user.uid)).then((snapshot) => {
+//     if(snapshot.exists()){
+//       email.value = snapshot.val().email;
+//       username.value = snapshot.val().username;
+//       fullname.value = snapshot.val().fullname;
+//       heightInput.value = snapshot.val().height;
+//       weightInput.value = snapshot.val().weight;
+//       bmiValue.value = snapshot.val().value;
+//       bmiDescription.value = snapshot.val().description;
+//     }
+//     else{
+//       alert("User does not exist");
+//     }
+//   })
+//   .catch((error) => {
+//     alert("Failed");
+//     console.log(error);
+//   })
+// }
+
+// const dbRef = ref(db);
+// let username = get(child(dbRef, 'UserProfile/' + user.uid)).email.value
+
+
 document.addEventListener('DOMContentLoaded', function() {
   const profileView = document.getElementById('profileView');
   const editProfileForm = document.getElementById('editProfileForm');
@@ -14,16 +61,41 @@ document.addEventListener('DOMContentLoaded', function() {
   const confirmButton = document.getElementById('confirmButton');
   const cancelDialogButton = document.getElementById('cancelButtonDialog');
 
-  // Mock user data (replace with actual data fetching in a real application)
-  const userData = {
-    username: 'johndoe',
-    firstName: 'John',
-    lastName: 'Doe',
-    gender: 'male',
-    height: 175,
-    weight: 70,
-    profilePicture: '/placeholder.svg?height=200&width=200'
-  };
+  // const userData = {
+  //   username: 'johndoe',
+  //   fullname: {firstName: 'John', lastName: 'Doe'},
+  //   gender: 'male',
+  //   height: 175,
+  //   weight: 70,
+  //   profilePicture: '/placeholder.svg?height=200&width=200'
+  // };
+
+  let userData = {};
+  let currentUser = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      loadUserData(user.uid);
+    } else {
+      // User is signed out, redirect to login page
+      window.location.href = "login.html";
+    }
+  });
+
+  function loadUserData(userId) {
+    get(ref(db, 'UserProfile/' + userId)).then((snapshot) => {
+      if (snapshot.exists()) {
+        userData = snapshot.val();
+        populateViewMode();
+        populateEditForm();
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
 
   function showConfirmationDialog(title, message, onConfirm) {
     dialogTitle.textContent = title;
@@ -42,23 +114,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Populate view mode
   function populateViewMode() {
-    document.getElementById('viewUsername').textContent = userData.username;
-    document.getElementById('viewFullName').textContent = `${userData.firstName} ${userData.lastName}`;
-    document.getElementById('viewGender').textContent = userData.gender;
-    document.getElementById('viewHeight').textContent = userData.height;
-    document.getElementById('viewWeight').textContent = userData.weight;
-    currentProfilePicture.src = userData.profilePicture;
+    document.getElementById('viewUsername').textContent = userData.username || '';
+    document.getElementById('viewFullName').textContent = `${userData.fullname.firstname || ''} ${userData.fullname.lastname || ''}`;
+    document.getElementById('viewGender').textContent = userData.gender || '';
+    document.getElementById('viewHeight').textContent = userData.height || '';
+    document.getElementById('viewWeight').textContent = userData.weight || '';
+    currentProfilePicture.src = userData.profilePicture || '/placeholder.svg?height=200&width=200';
   }
 
   // Populate edit form
   function populateEditForm() {
-    document.getElementById('username').value = userData.username;
-    document.getElementById('firstName').value = userData.firstName;
-    document.getElementById('lastName').value = userData.lastName;
-    document.getElementById('gender').value = userData.gender;
-    document.getElementById('height').value = userData.height;
-    document.getElementById('weight').value = userData.weight;
-    profilePicturePreview.src = userData.profilePicture;
+    document.getElementById('username').value = userData.username || '';
+    document.getElementById('firstName').value = userData.fullname.firstname || '';
+    document.getElementById('lastName').value = userData.fullname.lastname || '';
+    document.getElementById('gender').value = userData.gender || 'male';
+    document.getElementById('height').value = userData.height || '';
+    document.getElementById('weight').value = userData.weight || '';
+    profilePicturePreview.src = userData.profilePicture || '/placeholder.svg?height=200&width=200';
   }
 
   // Switch to edit mode
@@ -70,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Cancel edit and return to view mode
   cancelButton.addEventListener('click', function() {
-    
     showConfirmationDialog(
       'Cancel Changes',
       'Are you sure you want to cancel? Any unsaved changes will be lost.',
@@ -101,23 +172,31 @@ document.addEventListener('DOMContentLoaded', function() {
       'Save Changes',
       'Are you sure you want to save these changes?',
       function() {
-        userData.username = document.getElementById('username').value;
-        userData.firstName = document.getElementById('firstName').value;
-        userData.lastName = document.getElementById('lastName').value;
-        userData.gender = document.getElementById('gender').value;
-        userData.height = document.getElementById('height').value;
-        userData.weight = document.getElementById('weight').value;
-        userData.profilePicture = profilePicturePreview.src;
+        const updatedUserData = {
+          username: document.getElementById('username').value,
+          fullname: {
+            firstname: document.getElementById('firstName').value,
+            lastname: document.getElementById('lastName').value
+          },
+          gender: document.getElementById('gender').value,
+          height: document.getElementById('height').value,
+          weight: document.getElementById('weight').value,
+          profilePicture: profilePicturePreview.src
+        };
 
-        populateViewMode();
-        profileView.style.display = 'block';
-        editProfileForm.style.display = 'none';
-
-        alert('Profile updated successfully!');
+        update(ref(db, 'UserProfile/' + currentUser.uid), updatedUserData)
+          .then(() => {
+            userData = updatedUserData;
+            populateViewMode();
+            profileView.style.display = 'block';
+            editProfileForm.style.display = 'none';
+            alert('Profile updated successfully!');
+          })
+          .catch((error) => {
+            console.error("Error updating document: ", error);
+            alert('Failed to update profile. Please try again.');
+          });
       }
     );
   });
-
-  // Initial population of view mode
-  populateViewMode();
 });

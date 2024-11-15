@@ -1,14 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
+// import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
+import { getDatabase, ref, child, get, set, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
   authDomain: "virtual-lab-project.firebaseapp.com",
@@ -22,8 +17,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+const db = getDatabase(app);
+// const db = getFirestore(app);
 
 function showMessage(message, divId){
   var messageDiv = document.getElementById(divId);
@@ -42,7 +37,8 @@ register.addEventListener("click", function (event) {
 
   // Inputs
   const username = document.getElementById('username').value;
-  const fullname = document.getElementById('fullname').value;
+  const firstname = document.getElementById('firstname').value;
+  const lastname = document.getElementById('lastname').value;
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
@@ -52,22 +48,33 @@ register.addEventListener("click", function (event) {
       const user = userCredential.user;
       const userData = {
         username: username,
-        fullname: fullname,
+        fullname: {firstname, lastname},
         email: email,
         password: password
       };
       // alert("Akun Berhasil Dibuat!")
       showMessage("Akun Berhasil Dibuat!", "registerMessage");
 
-      // Adding to firebase
-      const docRef = doc(db, "users", user.uid);
-      setDoc(docRef, userData)
+      // Adding to realtime database
+      set(ref(db, 'UserProfile/' + user.uid), {
+        username: userData.username,
+        fullname: userData.fullname,
+        email: userData.email,
+        password: userData.password,
+      })
       .then(() => {
         window.location.href = "login.html";
       })
-      .catch((error) => {
-        console.error("Error writing document", error);
-      })
+
+      // // Adding to firestoe
+      // const docRef = doc(db, "users", user.uid);
+      // setDoc(docRef, userData)
+      // .then(() => {
+      //   window.location.href = "login.html";
+      // })
+      // .catch((error) => {
+      //   console.error("Error writing document", error);
+      // })
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -77,7 +84,5 @@ register.addEventListener("click", function (event) {
       else {
         showMessage("Tidak Bisa Membuat User", "registerMessage")
       }
-      // const errorMessage = error.message;
-      // alert(errorMessage)
     })
 });

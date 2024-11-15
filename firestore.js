@@ -21,7 +21,6 @@ const auth = getAuth();
 // 
 // CLOUD FIRESTORE CONFIGURATION
 // 
-
 const cloud = getFirestore();
 // Logged in
 onAuthStateChanged(auth, (user) => {
