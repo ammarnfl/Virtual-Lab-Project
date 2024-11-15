@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,27 +10,29 @@ import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBrJdGxfmk0XEpleqJeYpQgmEZmn_JLWK4",
-  authDomain: "virtual-lab-6eebc.firebaseapp.com",
-  projectId: "virtual-lab-6eebc",
-  storageBucket: "virtual-lab-6eebc.firebasestorage.app",
-  messagingSenderId: "275454075025",
-  appId: "1:275454075025:web:9e9598605bc8598fbbdf30",
-  measurementId: "G-ESM3SVQECN"
+  apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
+  authDomain: "virtual-lab-project.firebaseapp.com",
+  projectId: "virtual-lab-project",
+  storageBucket: "virtual-lab-project.firebasestorage.app",
+  messagingSenderId: "400854323817",
+  appId: "1:400854323817:web:b7efe2ac244034a56e48f8",
+  measurementId: "G-G90H1N4JVJ"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
-
 // Submit button
-const submit = document.getElementById('submit');
-submit.addEventListener("click", function (event) {
+const register = document.getElementById('register');
+register.addEventListener("click", function (event) {
   event.preventDefault()
 
   // Inputs
+  const username = document.getElementById('username').value;
+  const fullname = document.getElementById('fullname').value;
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
@@ -37,14 +40,18 @@ submit.addEventListener("click", function (event) {
     .then((userCredential) => {
       // Signed up
       const user = userCredential.user;
+      const userData = {
+        username: username,
+        fullname: fullname,
+        email: email
+      };
       alert("Akun Berhasil Dibuat!")
-      // ...
+      window.location.href = "login.html"
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       alert(errorMessage)
-      // ..
     });
 })
 

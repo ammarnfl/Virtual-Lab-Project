@@ -9,13 +9,13 @@ import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/fir
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBrJdGxfmk0XEpleqJeYpQgmEZmn_JLWK4",
-  authDomain: "virtual-lab-6eebc.firebaseapp.com",
-  projectId: "virtual-lab-6eebc",
-  storageBucket: "virtual-lab-6eebc.firebasestorage.app",
-  messagingSenderId: "275454075025",
-  appId: "1:275454075025:web:9e9598605bc8598fbbdf30",
-  measurementId: "G-ESM3SVQECN"
+  apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
+  authDomain: "virtual-lab-project.firebaseapp.com",
+  projectId: "virtual-lab-project",
+  storageBucket: "virtual-lab-project.firebasestorage.app",
+  messagingSenderId: "400854323817",
+  appId: "1:400854323817:web:b7efe2ac244034a56e48f8",
+  measurementId: "G-G90H1N4JVJ"
 };
 
 // Initialize Firebase
@@ -24,8 +24,8 @@ const auth = getAuth(app);
 const analytics = getAnalytics(app);
 
 // Submit button
-const submit = document.getElementById('submit');
-submit.addEventListener("click", function (event) {
+const Login = document.getElementById('login');
+login.addEventListener("click", function (event) {
   event.preventDefault()
 
   // Inputs
@@ -47,34 +47,3 @@ submit.addEventListener("click", function (event) {
       // ..
     });
 })
-
-
-
-// // Login requirement
-// const loginForm = document.getElementById("loginForm");
-
-// loginForm.addEventListener("submit", async (e) => {
-//   e.preventDefault();
-
-//   const email = document.getElementById("email").value;
-//   const password = document.getElementById("password").value;
-
-//   // Simulate Firebase Login
-//   try {
-//     const response = await fetch("https://your-backend-url.com/login", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ email, password }),
-//     });
-
-//     if (!response.ok) throw new Error("Login failed");
-
-//     const data = await response.json();
-//     alert("Login successful!");
-//     // Redirect or save session token
-//   } catch (err) {
-//     alert(err.message);
-//   }
-// });
