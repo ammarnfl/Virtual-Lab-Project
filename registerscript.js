@@ -1,7 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-// import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
 import { getDatabase, ref, child, get, set, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const firebaseConfig = {
@@ -65,16 +64,6 @@ register.addEventListener("click", function (event) {
       .then(() => {
         window.location.href = "login.html";
       })
-
-      // // Adding to firestoe
-      // const docRef = doc(db, "users", user.uid);
-      // setDoc(docRef, userData)
-      // .then(() => {
-      //   window.location.href = "login.html";
-      // })
-      // .catch((error) => {
-      //   console.error("Error writing document", error);
-      // })
     })
     .catch((error) => {
       const errorCode = error.code;

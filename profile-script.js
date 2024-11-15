@@ -18,33 +18,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-// function getData(){
-//   const dbRef = ref(db);
-
-//   get(child(dbRef, 'UserProfile/' + user.uid)).then((snapshot) => {
-//     if(snapshot.exists()){
-//       email.value = snapshot.val().email;
-//       username.value = snapshot.val().username;
-//       fullname.value = snapshot.val().fullname;
-//       heightInput.value = snapshot.val().height;
-//       weightInput.value = snapshot.val().weight;
-//       bmiValue.value = snapshot.val().value;
-//       bmiDescription.value = snapshot.val().description;
-//     }
-//     else{
-//       alert("User does not exist");
-//     }
-//   })
-//   .catch((error) => {
-//     alert("Failed");
-//     console.log(error);
-//   })
-// }
-
-// const dbRef = ref(db);
-// let username = get(child(dbRef, 'UserProfile/' + user.uid)).email.value
-
-
 document.addEventListener('DOMContentLoaded', function() {
   const profileView = document.getElementById('profileView');
   const editProfileForm = document.getElementById('editProfileForm');
