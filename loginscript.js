@@ -9,7 +9,8 @@ const firebaseConfig = {
   storageBucket: "virtual-lab-project.firebasestorage.app",
   messagingSenderId: "400854323817",
   appId: "1:400854323817:web:b7efe2ac244034a56e48f8",
-  measurementId: "G-G90H1N4JVJ"
+  measurementId: "G-G90H1N4JVJ",
+  databaseURL: "https://virtual-lab-project-default-rtdb.firebaseio.com/"
 };
 
 // Initialize Firebase

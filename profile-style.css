@@ -1,5 +1,8 @@
 body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   font-family: Arial, sans-serif;
+  height: 100vh;
   margin: 0;
   padding: 0;
   background-color: #f4f7f6;
@@ -49,12 +52,14 @@ nav a:hover::before {
 }
 
 main {
+  display: flex;
   height: 100%;
 }
 
 .container {
+  min-width: 600px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto;
   background-color: white;
   padding: 2rem;
   border-radius: 12px;
@@ -127,6 +132,10 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
+.form-group input{
+  max-width: 100%;
+}
+
 label {
   display: block;
   margin-bottom: 0.5rem;
@@ -177,7 +186,7 @@ footer {
   text-align: center;
   padding: 5px;
   bottom: 0;
-  width: 100%;
+  max-width: 100%;
 }
 
 /* Styles for the pop-up dialog */

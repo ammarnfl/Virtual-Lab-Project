@@ -10,14 +10,14 @@ const firebaseConfig = {
   storageBucket: "virtual-lab-project.firebasestorage.app",
   messagingSenderId: "400854323817",
   appId: "1:400854323817:web:b7efe2ac244034a56e48f8",
-  measurementId: "G-G90H1N4JVJ"
+  measurementId: "G-G90H1N4JVJ",
+  databaseURL: "https://virtual-lab-project-default-rtdb.firebaseio.com/"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
-// const db = getFirestore(app);
 
 function showMessage(message, divId){
   var messageDiv = document.getElementById(divId);
@@ -51,8 +51,6 @@ register.addEventListener("click", function (event) {
         email: email,
         password: password
       };
-      // alert("Akun Berhasil Dibuat!")
-      showMessage("Akun Berhasil Dibuat!", "registerMessage");
 
       // Adding to realtime database
       set(ref(db, 'UserProfile/' + user.uid), {
@@ -62,12 +60,16 @@ register.addEventListener("click", function (event) {
         password: userData.password,
       })
       .then(() => {
-        window.location.href = "login.html";
+        showMessage("Akun Berhasil Dibuat!", "registerMessage");
+        console.log("Data berhasil disimpan:", userData);
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000)
       })
     })
     .catch((error) => {
       const errorCode = error.code;
-      if (errorCode == 'auth/email-already-in-use') {
+      if (errorCode === 'auth/email-already-in-use') {
         showMessage("Email Sudah Digunakan!!", "registerMessage")
       }
       else {
