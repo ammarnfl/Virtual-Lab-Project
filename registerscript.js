@@ -53,7 +53,8 @@ register.addEventListener("click", function (event) {
       const userData = {
         username: username,
         fullname: fullname,
-        email: email
+        email: email,
+        password: password
       };
       // alert("Akun Berhasil Dibuat!")
       showMessage("Akun Berhasil Dibuat!", "registerMessage");

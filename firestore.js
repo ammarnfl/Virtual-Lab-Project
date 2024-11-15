@@ -1,12 +1,9 @@
-// Adding to database
+// Adding to cloud firestore and realtime database
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { getFirestore, getDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { getDatabase, ref, child, get, set, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBn_DXgJZTBXFOL7FtF2TNbPv3Jmh8Es4Y",
   authDomain: "virtual-lab-project.firebaseapp.com",
@@ -19,15 +16,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+// 
+// CLOUD FIRESTORE CONFIGURATION
+// 
 
+const cloud = getFirestore();
 // Logged in
 onAuthStateChanged(auth, (user) => {
   const loggedInUserId = localStorage.getItem('loggedInUserId')
   if (loggedInUserId) {
-    const docRef = doc(db, "users", loggedInUserId);
+    const docRef = doc(cloud, "users", loggedInUserId);
     getDoc(docRef)
     .then((docSnap) => {
       if(docSnap.exists()){
@@ -60,3 +60,95 @@ logoutButton.addEventListener('click', () => {
     console.error('Error Signing out:', error);
   })
 });
+
+// 
+// REALTIME DATABASE CONFIGURATION
+// 
+const db = getDatabase();
+
+let username = userData.username;
+let email = userData.email;
+let fullname = userData.fullname;
+
+let infobtn = document.getElementById('infobtn');
+let editProfile = document.getElementById('editprofile');
+let logOut = document.getElementById('logout');
+let changeGender = document.getElementById('changegender');
+let coordinateCanvas = document.getElementById('coordinateCanvas');
+let heightInput = document.getElementById('heightInput');
+let weightInput = document.getElementById('weightInput');
+let count = document.getElementById('count');
+let bmiValue = document.getElementById('bmiValue');
+let bmiDescription = document.getElementById('bmiDescription');
+let articles = document.getElementsByClassName('article');
+
+function AddData(){
+  set(ref(db, 'UserSet/' + userData.email), {
+    email: email,
+    username: username,
+    fullname: fullname,
+    height: heightInput,
+    weight: weightInput,
+    value: bmiValue,
+    description: bmiDescription
+  })
+  .then(()=>{
+    alert("Data Added Successfully");
+  })
+  .catch((error) => {
+    alert("Failed");
+    console.log(error);
+  })
+}
+
+function getData(){
+  const dbRef = ref(db);
+
+  get(child(dbRef, 'UserSet/' + userData.email)).then((snapshot) => {
+    if(snapshot.exists()){
+      email.value = snapshot.val().email;
+      username.value = snapshot.val().username;
+      fullname.value = snapshot.val().fullname;
+      heightInput.value = snapshot.val().height;
+      weightInput.value = snapshot.val().weight;
+      bmiValue.value = snapshot.val().value;
+      bmiDescription.value = snapshot.val().description;
+    }
+    else{
+      alert("User does not exist");
+    }
+  })
+  .catch((error) => {
+    alert("Failed");
+    console.log(error);
+  })
+}
+
+function UpdateData(){
+  update(ref(db, 'UserSet/' + userData.email), {
+    username: username,
+    fullname: fullname,
+    height: heightInput,
+    weight: weightInput,
+    value: bmiValue,
+    description: bmiDescription
+  })
+  .then(()=>{
+    alert("Data Updated Successfully");
+  })
+  .catch((error) => {
+    alert("Failed!");
+    console.log(error);
+  })
+}
+
+function DeleteData(){
+  remove(ref(db, 'UserSet/' + userData.email))
+  .then(()=>{
+    alert("Account Deleted Successfully");
+  })
+  .catch((error) => {
+    alert("Failed!");
+    console.log(error);
+  })
+}
