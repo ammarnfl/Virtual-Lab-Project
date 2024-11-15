@@ -43,7 +43,6 @@ login.addEventListener("click", function (event) {
       showMessage("Login Berhasil!", "loginMessage");
       localStorage.setItem("loggedInUserId", user.uid);
       window.location.href = "index.html";
-      // alert("Berhasil Login!")
     })
     .catch((error) => {
       const errorCode = error.code;

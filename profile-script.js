@@ -35,15 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const confirmButton = document.getElementById('confirmButton');
   const cancelDialogButton = document.getElementById('cancelButtonDialog');
 
-  // const userData = {
-  //   username: 'johndoe',
-  //   fullname: {firstName: 'John', lastName: 'Doe'},
-  //   gender: 'male',
-  //   height: 175,
-  //   weight: 70,
-  //   profilePicture: '/placeholder.svg?height=200&width=200'
-  // };
-
   let userData = {};
   let currentUser = null;
 

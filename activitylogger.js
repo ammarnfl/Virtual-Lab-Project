@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Profile Update (assuming there's a save button with id 'saveProfile')
   const profileForm = document.getElementById('saveProfile');
   if (profileForm) {
     profileForm.addEventListener('submit', (e) => {
@@ -110,6 +109,4 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
-// Export the logActivity function in case it's needed elsewhere
 export { logActivity };
