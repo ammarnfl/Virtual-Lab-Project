@@ -23,6 +23,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const analytics = getAnalytics(app);
 
+function showMessage(message, divId){
+  var messageDiv = document.getElementById(divId);
+  messageDiv.style.display = "block";
+  messageDiv.innerHTML = message;
+  messageDiv.style.opacity = 1;
+  setTimeout( function() { 
+      messageDiv.style.opacity = 0;
+  }, 5000);
+}
+
 // Submit button
 const Login = document.getElementById('login');
 login.addEventListener("click", function (event) {
@@ -36,14 +46,20 @@ login.addEventListener("click", function (event) {
     .then((userCredential) => {
       // Signed up
       const user = userCredential.user;
-      alert("Berhasil Login!")
+      showMessage("Login Berhasil!", "loginMessage");
+      localStorage.setItem("loggedInUserId", user.uid);
       window.location.href = "index.html";
-      // ...
+      // alert("Berhasil Login!")
     })
     .catch((error) => {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      alert("Password Salah!")
-      // ..
+      if(errorCode === 'auth/invalid-credential'){
+        showMessage("Incorrect Email or Password", "loginMessage");
+      }
+      else{
+        showMessage("Account does not Exist", "signInMessage");
+      }
+      // const errorMessage = error.message;
+      // alert("Password Salah!")
     });
 })

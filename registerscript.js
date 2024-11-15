@@ -25,6 +25,16 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
+function showMessage(message, divId){
+  var messageDiv = document.getElementById(divId);
+  messageDiv.style.display = "block";
+  messageDiv.innerHTML = message;
+  messageDiv.style.opacity = 1;
+  setTimeout( function() { 
+      messageDiv.style.opacity = 0;
+  }, 5000);
+}
+
 // Submit button
 const register = document.getElementById('register');
 register.addEventListener("click", function (event) {
@@ -45,43 +55,28 @@ register.addEventListener("click", function (event) {
         fullname: fullname,
         email: email
       };
-      alert("Akun Berhasil Dibuat!")
-      window.location.href = "login.html"
+      // alert("Akun Berhasil Dibuat!")
+      showMessage("Akun Berhasil Dibuat!", "registerMessage");
+
+      // Adding to firebase
+      const docRef = doc(db, "users", user.uid);
+      setDoc(docRef, userData)
+      .then(() => {
+        window.location.href = "login.html";
+      })
+      .catch((error) => {
+        console.error("Error writing document", error);
+      })
     })
     .catch((error) => {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage)
-    });
-})
-
-
-
-// // Login requirement
-// const loginForm = document.getElementById("loginForm");
-
-// loginForm.addEventListener("submit", async (e) => {
-//   e.preventDefault();
-
-//   const email = document.getElementById("email").value;
-//   const password = document.getElementById("password").value;
-
-//   // Simulate Firebase Login
-//   try {
-//     const response = await fetch("https://your-backend-url.com/login", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ email, password }),
-//     });
-
-//     if (!response.ok) throw new Error("Login failed");
-
-//     const data = await response.json();
-//     alert("Login successful!");
-//     // Redirect or save session token
-//   } catch (err) {
-//     alert(err.message);
-//   }
-// });
+      if (errorCode == 'auth/email-already-in-use') {
+        showMessage("Email Sudah Digunakan!!", "registerMessage")
+      }
+      else {
+        showMessage("Tidak Bisa Membuat User", "registerMessage")
+      }
+      // const errorMessage = error.message;
+      // alert(errorMessage)
+    })
+});
